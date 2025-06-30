@@ -1,0 +1,50 @@
+/* Products.module.css */
+
+/* Global box-sizing and image styling for responsive layout */
+*:global(*) {
+  box-sizing: border-box;
+}
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three columns by default */
+  gap: 20px;
+  padding: 20px;
+  background-color: #FFF2E0; /* light background from palette */
+}
+
+/* Stack columns on narrow screens (one column) */
+@media (max-width: 768px) {
+  .products {
+    grid-template-columns: 1fr; /* single column on mobile */
+  }
+}
+
+.productCard {
+  background-color: #C0C9EE; /* card background from palette */
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Ensure product images scale to card width */
+.productImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+/* Product name styling */
+.productName {
+  color: #898AC4;  /* dark accent from palette */
+  font-size: 1.1em;
+  margin: 10px 0 5px;
+}
+
+/* Product price styling */
+.productPrice {
+  color: #A2AADB;  /* lighter accent from palette */
+  font-size: 1em;
+  margin: 0;
+}

@@ -1,0 +1,35 @@
+.topHeader {
+  background-color: #c0c9ee;
+  font-size: small;
+  font-weight: 500;
+  padding: 5px 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.marqueeWrapper {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.marqueeContent {
+  display: inline-block;
+  padding-left: 50%;
+  animation: scroll-left 25s linear infinite;
+}
+
+.marqueeContent span {
+  display: inline-block;
+  margin-right: 60px;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
