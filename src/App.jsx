@@ -15,7 +15,7 @@ function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <>
+    <div>
       <TopHeader />
       <Navbar />
       <Routes>
@@ -25,7 +25,7 @@ function App() {
         <Route path="/newarrivals" element={<NewArrivals />} />
         <Route path="/product/:id" element={<ProductDetails />} />
       </Routes>
-    </>
+    </div>
   );
 }
 

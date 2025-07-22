@@ -7,7 +7,7 @@
   padding: 5px 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
   flex-wrap: wrap;
 }
@@ -15,12 +15,12 @@
 .options {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   flex-wrap: wrap;
 }
 
 .option {
-  padding: 4px 6px;
+  padding: 3px 6px;
   cursor: pointer;
   border-left: 1px solid #333;
   white-space: nowrap;
@@ -41,7 +41,7 @@
   width: 80px;
   height: auto;
   object-fit: contain;
-  margin-right: 300px;
+  margin-right: 400px;
 }
 
 /* Prevent breaking layout on smaller screens */

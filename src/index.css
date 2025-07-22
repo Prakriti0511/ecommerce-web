@@ -4,4 +4,8 @@
 
 :root {
     background-color: #FFF2E0;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
 }
