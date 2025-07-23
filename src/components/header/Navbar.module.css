@@ -38,10 +38,12 @@
 }
 
 .logo {
+  padding-left: 150px;
   width: 80px;
   height: auto;
   object-fit: contain;
-  margin-right: 400px;
+  padding-right: 150px;
+  margin-right: 300px;
 }
 
 /* Prevent breaking layout on smaller screens */
