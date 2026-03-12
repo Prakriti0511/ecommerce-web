@@ -13,7 +13,7 @@ function Navbar() {
         <FaSearch className={styles.icon} />
       </div>
 
-      <img src="./lush.png" alt="not available" className={styles.logo} />
+      <img src="./flowcare.png" alt="not available" className={styles.logo} />
 
       <div className={styles.right}>
         <div className={`${styles.option} ${styles.firstOption}`}>LOGIN</div>
