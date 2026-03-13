@@ -1,11 +1,12 @@
 .topHeader {
-  background-color: #c0c9ee;
+  background-color: #3c3e4a;
   font-size: small;
   font-weight: 500;
   font-family: 'Courier New', Courier, monospace;
   padding: 5px 0;
   overflow: hidden;
   position: relative;
+  color: #f3f1ec;
 }
 
 .marqueeWrapper {

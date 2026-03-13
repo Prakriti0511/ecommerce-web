@@ -1,5 +1,5 @@
 .Navbar {
-  background-color: #fff9f2;
+  background-color: #f3f1ec;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0);
   font-size: small;
   font-weight: 500;
@@ -38,11 +38,11 @@
 }
 
 .logo {
-  padding-left: 130px;
+  padding-left: 160px;
   width: 80px;
   height: auto;
   object-fit: contain;
-  padding-right: 150px;
+  padding-right: 170px;
   margin-right: 300px;
 }
 
