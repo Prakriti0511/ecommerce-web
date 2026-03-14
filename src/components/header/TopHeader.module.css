@@ -3,7 +3,7 @@
   font-size: small;
   font-weight: 500;
   font-family: 'Courier New', Courier, monospace;
-  padding: 5px 0;
+  padding: 2px 0; /* Reduced from 5px to 2px */
   overflow: hidden;
   position: relative;
   color: #f3f1ec;

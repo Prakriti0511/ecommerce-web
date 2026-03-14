@@ -17,9 +17,16 @@ function App() {
   return (
     <>
       <TopHeader />
-      <Navbar />
       <Routes>
-        <Route path="/" element={<MainImage />} />
+        <Route
+          path="/"
+          element={
+            <>
+              <MainImage />
+              <NewArrivals />
+            </>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Registration />} />
         <Route path="/newarrivals" element={<NewArrivals />} />
