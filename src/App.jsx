@@ -18,15 +18,7 @@ function App() {
     <>
       <TopHeader />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <MainImage />
-              <NewArrivals />
-            </>
-          }
-        />
+        <Route path="/" element={<MainImage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Registration />} />
         <Route path="/newarrivals" element={<NewArrivals />} />
