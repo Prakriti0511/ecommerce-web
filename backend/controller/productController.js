@@ -1,32 +1,65 @@
-const Product = require("../models/Product");
+import Product from "../model/product.js";
 
 // get all products
-exports.getProducts = async (req, res) => {
-  const products = await Product.find();
-  res.json(products);
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 // get single product
-exports.getProduct = async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  res.json(product);
+const getProductById = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 // create product
-exports.createProduct = async (req, res) => {
-  const product = new Product(req.body);
-  const saved = await product.save();
-  res.json(saved);
+const createProduct = async (req, res) => {
+  try {
+    const product = new Product(req.body);
+    const saved = await product.save();
+    res.json(saved);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 // new arrivals
-exports.getNewArrivals = async (req, res) => {
-  const products = await Product.find({ isNewArrival: true });
-  res.json(products);
+const getNewArrivals = async (req, res) => {
+  try {
+    const products = await Product.find({ isNewArrival: true });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 // best sellers
-exports.getBestSellers = async (req, res) => {
-  const products = await Product.find({ isBestSeller: true });
-  res.json(products);
+const getBestSellers = async (req, res) => {
+  try {
+    const products = await Product.find({ isBestSeller: true });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
+
+const productController = {
+  getAllProducts,
+  getNewArrivals,
+  getBestSellers,
+  getProductById,
+  createProduct
+};
+
+export default productController;
