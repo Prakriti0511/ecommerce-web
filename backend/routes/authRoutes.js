@@ -1,8 +1,8 @@
 import express from "express"
-import { registration } from "../controller/authController.js"
-import { login } from "../controller/authController.js"
-import { logOut } from "../controller/authController.js"
-import { googleLogin } from "../controller/authController.js"
+import { registration } from "../controllers/authController.js"
+import { login } from "../controllers/authController.js"
+import { logOut } from "../controllers/authController.js"
+import { googleLogin } from "../controllers/authController.js"
 
 
 const authRoutes = express.Router()
