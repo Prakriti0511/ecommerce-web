@@ -1,4 +1,5 @@
 import Cart from "../models/cartModel.js";
+import Product from "../models/product.js";
 
 // GET USER CART
 export const getCart = async (req, res) => {
@@ -7,7 +8,10 @@ export const getCart = async (req, res) => {
 
     res.json(cart || { items: [] });
   } catch (error) {
-    res.status(500).json({ message: "Error fetching cart" });
+    res.status(500).json({ 
+      message: "Error fetching cart", 
+      error: error.message 
+    });
   }
 };
 
@@ -16,6 +20,11 @@ export const addToCart = async (req, res) => {
   const { productId, quantity } = req.body;
 
   try {
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(400).json({ message: "Product not found" });
+    }
+
     let cart = await Cart.findOne({ user: req.user.id });
 
     if (!cart) {
@@ -39,7 +48,10 @@ export const addToCart = async (req, res) => {
 
     res.json(cart);
   } catch (error) {
-    res.status(500).json({ message: "Error adding to cart" });
+    res.status(500).json({ 
+      message: "Error adding to cart", 
+      error: error.message 
+    });
   }
 };
 
@@ -50,6 +62,10 @@ export const removeFromCart = async (req, res) => {
   try {
     const cart = await Cart.findOne({ user: req.user.id });
 
+    if (!cart) {
+      return res.status(400).json({ message: "Cart not found" });
+    }
+
     cart.items = cart.items.filter(
       item => item.product.toString() !== productId
     );
@@ -58,6 +74,9 @@ export const removeFromCart = async (req, res) => {
 
     res.json(cart);
   } catch (error) {
-    res.status(500).json({ message: "Error removing item" });
+    res.status(500).json({ 
+      message: "Error removing item", 
+      error: error.message 
+    });
   }
 };
