@@ -1,10 +1,10 @@
 .Navbar {
   background-color: #f3f1ec;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0);
-  font-size: small;
+  font-size: 0.5rem;
   font-weight: 500;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  padding: 2px 10px;
+  padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -20,10 +20,11 @@
 }
 
 .option {
-  padding: 3px 6px;
+  padding: 0.7rem 0.85rem;
   cursor: pointer;
   border-left: 1px solid #333;
   white-space: nowrap;
+  transition: all 0.3s ease;
 }
 
 .firstOption {
@@ -38,18 +39,34 @@
 }
 
 .logo {
-  padding-left: 150px;
   width: 80px;
   height: auto;
   object-fit: contain;
-  padding-right: 180px;
-  margin-right: 300px;
+  margin: 0 1rem;
 }
 
-/* Prevent breaking layout on smaller screens */
+/* Enhanced responsive breakpoints */
+@media (max-width: 1200px) {
+  .Navbar {
+    font-size: 0.95rem;
+  }
+
+  .option {
+    padding: 0.4rem 0.6rem;
+  }
+}
+
 @media (max-width: 1024px) {
+  .Navbar {
+    font-size: 0.9rem;
+  }
+
   .logo {
-    margin-right: 100px;
+    margin-right: 2rem;
+  }
+
+  .option {
+    padding: 0.3rem 0.5rem;
   }
 }
 
@@ -57,38 +74,63 @@
   .Navbar {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 1rem;
+    padding: 0.5rem;
   }
 
   .logo {
     margin-right: auto;
+    width: 70px;
   }
 
   .options, .right {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .option {
+    padding: 0.4rem 0.6rem;
+    border-left: none;
+    border-bottom: 1px solid #ccc;
+    width: calc(50% - 0.5rem);
+    text-align: center;
+  }
+
+  .icon {
+    font-size: 1.2rem;
   }
 }
 
 @media (max-width: 480px) {
+  .Navbar {
+    padding: 0.25rem;
+  }
+
   .options {
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px;
+    gap: 0.25rem;
   }
 
   .right {
     justify-content: flex-start;
-    gap: 8px;
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
   .option {
-    border-left: none;
+    padding: 0.5rem;
     border-bottom: 1px solid #ccc;
     width: 100%;
+    text-align: left;
   }
 
   .icon {
-    font-size: 16px;
+    font-size: 1rem;
+  }
+
+  .logo {
+    width: 60px;
   }
 }

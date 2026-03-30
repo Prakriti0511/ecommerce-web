@@ -1,6 +1,6 @@
 import Navbar from "../header/Navbar";
 
-function MainImage() {
+function Home() {
   return (
     <div className="relative w-full min-h-screen bg-[url('/1.png')] bg-cover bg-center bg-no-repeat">
       <div className="absolute inset-0 bg-black/30" />
@@ -16,4 +16,4 @@ function MainImage() {
   );
 }
 
-export default MainImage;
+export default Home;

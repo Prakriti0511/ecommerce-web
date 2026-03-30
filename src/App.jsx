@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import TopHeader from './components/header/TopHeader';
 import Navbar from './components/header/Navbar';
-import MainImage from './components/pages/MainImage';
+import Home from './components/pages/Home';
 import ProductDetails from './components/header/Navbar'; 
 import NewArrivals from './components/pages/NewArrivals';
 import Products from './components/pages/Products';
@@ -18,7 +18,7 @@ function App() {
     <>
       <TopHeader />
       <Routes>
-        <Route path="/" element={<MainImage />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Registration />} />
         <Route path="/newarrivals" element={<NewArrivals />} />
