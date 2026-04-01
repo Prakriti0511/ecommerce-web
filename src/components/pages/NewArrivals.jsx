@@ -41,7 +41,7 @@ function NewArrivals() {
                 key={product.id}
                 className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white"
               >
-                <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
+<div className="w-full h-32 bg-gray-100 flex items-center justify-center">
                   <img
                     src={product.image}
                     alt={product.name}
