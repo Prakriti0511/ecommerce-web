@@ -1,9 +1,11 @@
 import styles from "./Navbar.module.css";
 import { FaShoppingCart, FaSearch } from "react-icons/fa";
 
-function Navbar() {
+function Navbar({ variant }) {
+  const isTransparent = variant === "transparent";
+
   return (
-    <div className={styles.Navbar}>
+    <div className={`${styles.Navbar} ${isTransparent ? styles.transparent : ""}`}>
       <div className={styles.options}>
         <div className={`${styles.option} ${styles.firstOption}`}>NEW ARRIVALS</div>
         <div className={styles.option}>SKIN CARE</div>
