@@ -1,5 +1,6 @@
 import styles from "./Navbar.module.css";
 import { FaShoppingCart, FaSearch } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 function Navbar({ variant }) {
   const isTransparent = variant === "transparent";
@@ -19,8 +20,12 @@ function Navbar({ variant }) {
         </div>
 
         <div className={styles.right}>
-          <div className={`${styles.option} ${styles.firstOption}`}>LOGIN</div>
-          <div className={styles.option}><FaShoppingCart className={styles.icon} /></div>
+          <Link to="/login" className={`${styles.option} ${styles.firstOption} ${styles.navLink}`}>
+            LOGIN
+          </Link>
+          <div className={`${styles.option} ${styles.cartOption}`}>
+            <FaShoppingCart className={styles.icon} />
+          </div>
         </div>
       </div>
     </div>

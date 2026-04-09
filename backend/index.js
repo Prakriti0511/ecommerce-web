@@ -5,10 +5,17 @@ import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import wishlistRoutes from "./routes/wishlistRoutes.js";
 import express from "express";
+import cors from "cors";
 
 const app = express();
 dotenv.config();
+
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 
 let port = process.env.PORT || 6000;
 
@@ -18,6 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 
 app.get("/", (req, res) => {
     res.send("hello");
