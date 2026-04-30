@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import './App.css';
-import TopHeader from './components/header/TopHeader';
 import Navbar from './components/header/Navbar';
 import Home from './components/pages/Home';
 import ProductDetails from './components/header/Navbar'; 
@@ -16,7 +15,6 @@ function App() {
 
   return (
     <>
-      <TopHeader />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

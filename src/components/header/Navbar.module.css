@@ -1,156 +1,71 @@
-.Navbar {
-  background-color: transparent;
-  box-shadow: none;
-  color: black;
-  font-size: 1rem;
-  font-weight: 500;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  padding: 0.65rem 0.75rem;
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 12px 18px 12px 14px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  flex-wrap: wrap;
+
+  font-family: 'Khula', 'Segoe UI', sans-serif;
+  letter-spacing: 0.045em;
+  font-weight: 500;
+  z-index: 10;
 }
 
-.navLinks {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
+.transparent {
+  color: rgba(36, 36, 36, 0.92);
 }
 
-.options {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex-wrap: wrap;
-}
-
-.option {
-  padding: 0.35rem 0.45rem;
-  cursor: pointer;
+.home {
+  font-size: 14px;
+  line-height: 1;
   white-space: nowrap;
-  transition: all 0.3s ease;
-  color: black;
 }
 
-.navLink {
-  text-decoration: none;
-  color: inherit;
+.center {
+  display: flex;
+  gap: 38px;
+  font-size: 14px;
+  line-height: 1;
+  margin-left: 20px;
+  margin-right: auto;
 }
 
-.cartOption {
-  padding-right: 1.35rem;
+.center span {
+  cursor: pointer;
+  transition: opacity 0.3s;
+  white-space: nowrap;
 }
 
-.firstOption {
-  border-left: none;
+.center span:hover {
+  opacity: 0.7;
 }
 
 .right {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 13px;
+  padding-right: 6px;
+  flex-shrink: 0;
 }
 
-.logo {
-  width: 90px;
-  height: auto;
-  object-fit: contain;
-  margin: 0;
+.right a {
+  text-decoration: none;
+  color: inherit;
 }
 
-.icon {
-  font-size: 1rem;
-}
-
-/* Enhanced responsive breakpoints */
-@media (max-width: 1200px) {
-  .Navbar {
-    font-size: 0.95rem;
-  }
-
-  .option {
-    padding: 0.3rem 0.4rem;
-  }
-}
-
-@media (max-width: 1024px) {
-  .Navbar {
-    font-size: 0.9rem;
-  }
-
-  .logo {
-    margin-right: 2rem;
-  }
-
-  .option {
-    padding: 0.28rem 0.38rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .Navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 0.5rem;
-  }
-
-  .logo {
-    margin-right: auto;
-    width: 70px;
-  }
-
-  .options, .right {
-    width: 100%;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-
-  .option {
-    padding: 0.4rem 0.6rem;
-    border-left: none;
-    border-bottom: 1px solid #ccc;
-    width: calc(50% - 0.5rem);
-    text-align: center;
-  }
-
-  .icon {
-    font-size: 1.2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .Navbar {
-    padding: 0.25rem;
-  }
-
-  .options {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-
-  .right {
-    justify-content: flex-start;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .option {
-    padding: 0.5rem;
-    border-bottom: 1px solid #ccc;
-    width: 100%;
-    text-align: left;
-  }
-
-  .icon {
-    font-size: 1rem;
-  }
-
-  .logo {
-    width: 60px;
-  }
+.loginBtn {
+  border: 1px solid rgba(53, 53, 53, 0.58);
+  border-radius: 999px;
+  padding: 6px 16px 7px;
+  font-size: 13px;
+  line-height: 1.1;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+  color: #f7e7c8;
+  background: transparent;
 }
