@@ -29,7 +29,7 @@ function mapProductToCard(p) {
     price,
     ratingVal,
     rating: ratingLabel,
-    image: resolveImageUrl(p.images?.[0]),
+    image: "/bestseller_img.avif",
   };
 }
 
@@ -87,34 +87,34 @@ function ProductCard({ product, inWishlist, wishlistBusyId, onWishlistToggle }) 
         >
           <HeartIcon filled={inWishlist} />
         </button>
-        {/* Name + price overlay at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-3 z-10">
-          <p
-            style={{
-              fontFamily: "'Cascadia Code', 'Courier New', monospace",
-              fontSize: "16px",
-              color: "white",
-              margin: 0,
-              lineHeight: "1.3",
-            }}
-          >
-            {product.name}
-          </p>
-          <p
-            style={{
-              fontFamily: "'Cascadia Code', 'Courier New', monospace",
-              fontSize: "14px",
-              color: "white",
-              margin: 0,
-              marginTop: "2px",
-            }}
-          >
-            {product.price}
-          </p>
-        </div>
+      </div>
+      {/* Name + price below image */}
+      <div className="px-4 pt-6 pb-2">
+        <p
+          style={{
+            fontFamily: "'Cascadia Code', 'Courier New', monospace",
+            fontSize: "16px",
+            color: "#4b4b4b",
+            margin: 0,
+            lineHeight: "1.3",
+          }}
+        >
+          {product.name}
+        </p>
+        <p
+          style={{
+            fontFamily: "'Cascadia Code', 'Courier New', monospace",
+            fontSize: "14px",
+            color: "#4b4b4b",
+            margin: 0,
+            marginTop: "2px",
+          }}
+        >
+          {product.price}
+        </p>
       </div>
       {/* Stars */}
-      <div className="flex items-center gap-0.5 px-3 pt-3 pb-3">
+      <div className="flex items-center gap-0.5 px-3 pb-3">
         {[1, 2, 3, 4, 5].map((i) => (
           <span
             key={i}
@@ -139,7 +139,7 @@ function ProductRow({ products, loading, error, wishlistIds, wishlistBusyId, onW
   if (products.length === 0)
     return <p style={{ fontSize: "14px", color: "#888", padding: "16px 0" }}>No products found.</p>;
   return (
-    <div className="flex gap-5 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
+    <div className="flex overflow-x-auto pb-2" style={{ scrollbarWidth: "thin", scrollBehavior: "smooth", paddingLeft: "14px", paddingRight: "14px", gap: "24px" }}>
       {products.map((product) => (
         <ProductCard
           key={product.id}
