@@ -3,6 +3,7 @@
   top: 0;
   left: 0;
   width: 100%;
+  box-sizing: border-box;
   padding: 12px 18px 12px 14px;
 
   display: flex;
@@ -27,11 +28,14 @@
 
 .center {
   display: flex;
-  gap: 38px;
+  flex: 1;
+  min-width: 0;
+  justify-content: flex-start;
+  gap: clamp(14px, 2.5vw, 30px);
   font-size: 14px;
   line-height: 1;
-  margin-left: 20px;
-  margin-right: auto;
+  margin-left: 0;
+  margin-right: clamp(10px, 1.8vw, 16px);
 }
 
 .center span {
@@ -47,9 +51,9 @@
 .right {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: clamp(8px, 1.6vw, 14px);
   font-size: 13px;
-  padding-right: 6px;
+  padding-right: 0;
   flex-shrink: 0;
 }
 

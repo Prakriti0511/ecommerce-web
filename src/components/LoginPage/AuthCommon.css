@@ -1,0 +1,58 @@
+.auth-page {
+  font-family: "Playfair Display", "Times New Roman", serif;
+}
+
+.auth-subtitle {
+  color: #706d68;
+}
+
+.auth-card {
+  background: #ece7e2;
+  border: 1px solid #ddd5cd;
+}
+
+.auth-google-btn {
+  background: #f7e7c8;
+  color: #4b4b4b;
+  border: 2px solid #ddd5cd;
+}
+
+.auth-google-btn:hover {
+  background: #f0ddb8;
+}
+
+.auth-divider {
+  background: #ddd5cd;
+}
+
+.auth-input {
+  border: 1px solid #ddd5cd;
+  background: #faf8f3;
+  color: #4b4b4b;
+}
+
+.auth-input::placeholder {
+  color: #a89f99;
+}
+
+.auth-eye-icon {
+  color: #7e7972;
+}
+
+.auth-submit-btn {
+  background: #f7e7c8;
+  color: #4b4b4b;
+  border: 1px solid #4b4b4b;
+}
+
+.auth-submit-btn:hover {
+  background: #f0ddb8;
+}
+
+.auth-link {
+  color: #e891a8;
+}
+
+.auth-error {
+  color: #b44646;
+}

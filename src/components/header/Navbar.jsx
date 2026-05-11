@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 function Navbar({ variant = "transparent" }) {
   return (
     <header className={`${styles.navbar} ${styles[variant]}`}>
-      <span className={styles.home}>HOME</span>
       <nav className={styles.center}>
+        <span className={styles.home}>HOME</span>
         <span>REVIEWS</span>
         <span>NEW ARRIVALS</span>
         <span>BESTSELLERS</span>
