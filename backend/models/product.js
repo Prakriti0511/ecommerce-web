@@ -15,7 +15,21 @@ const productSchema = new mongoose.Schema({
 
   category: String,
 
-  images: [String],
+  /** Optional — used by recommendation chatbot filters */
+  brand: String,
+
+  tags: [String],
+
+  /** e.g. ["dry", "oily", "sensitive", "combination", "normal"] */
+  skinType: [String],
+
+  /** e.g. ["acne", "aging", "dark spots"] */
+  concerns: [String],
+
+  /** e.g. ["niacinamide", "vitamin c", "hyaluronic acid"] */
+  ingredients: [String],
+
+  image: String,
 
   stock: {
     type: Number,

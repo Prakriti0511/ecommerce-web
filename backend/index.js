@@ -6,6 +6,7 @@ import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import wishlistRoutes from "./routes/wishlistRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 import express from "express";
 import cors from "cors";
 
@@ -26,6 +27,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/chat", chatRoutes);
 
 app.get("/", (req, res) => {
     res.send("hello");

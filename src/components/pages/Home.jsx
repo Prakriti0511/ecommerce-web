@@ -1,5 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../header/Navbar";
+import "./Home.css";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE?.replace(/\/$/, "") || "http://localhost:5000";
@@ -7,10 +9,11 @@ const API_BASE =
 const HERO_IMAGE = "/hero_image.jpg";
 const SKIN_TYPE_IMAGE =
   "https://api.builder.io/api/v1/image/assets/TEMP/aa1ec44ee29a90caf0ef476ef282c8c5a2b00292?width=1284";
-function resolveImageUrl(src) {
+function resolveProductImage(src) {
   if (!src) return "/products-grey.png";
-  if (src.startsWith("http")) return src;
-  return `${API_BASE}${src.startsWith("/") ? "" : "/"}${src}`;
+  if (/^https?:\/\//i.test(src)) return src;
+  if (src.startsWith("/")) return src;
+  return `${API_BASE}/${src.replace(/^\/+/, "")}`;
 }
 
 function mapProductToCard(p) {
@@ -29,7 +32,7 @@ function mapProductToCard(p) {
     price,
     ratingVal,
     rating: ratingLabel,
-    image: "/bestseller_img.avif",
+    image: resolveProductImage(p.image),
   };
 }
 
@@ -61,12 +64,18 @@ function ProductCard({ product, inWishlist, wishlistBusyId, onWishlistToggle }) 
       style={{ background: "#F2EEE8", width: "300px", borderRadius: "12px", overflow: "hidden" }}
     >
       {/* Product image with overlay text */}
-      <div className="relative" style={{ height: "320px" }}>
+      <div
+        className="relative overflow-hidden group"
+        style={{
+          height: "320px",
+          borderRadius: "25px",
+          boxShadow: "0 4px 4px 0 rgba(0,0,0,0.25)",
+        }}
+      >
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover"
-          style={{ borderRadius: "25px", boxShadow: "0 4px 4px 0 rgba(0,0,0,0.25)" }}
+          className="w-full h-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.08]"
         />
         {/* Gradient overlay for text readability */}
         <div
@@ -131,7 +140,7 @@ function ProductCard({ product, inWishlist, wishlistBusyId, onWishlistToggle }) 
   );
 }
 
-function ProductRow({ products, loading, error, wishlistIds, wishlistBusyId, onWishlistToggle }) {
+function ProductRow({ products, loading, error, wishlistIds, wishlistBusyId, onWishlistToggle, hideScrollbar }) {
   if (loading)
     return <p style={{ fontSize: "14px", color: "#888", padding: "16px 0" }}>Loading…</p>;
   if (error)
@@ -139,7 +148,16 @@ function ProductRow({ products, loading, error, wishlistIds, wishlistBusyId, onW
   if (products.length === 0)
     return <p style={{ fontSize: "14px", color: "#888", padding: "16px 0" }}>No products found.</p>;
   return (
-    <div className="flex overflow-x-auto pb-2" style={{ scrollbarWidth: "thin", scrollBehavior: "smooth", paddingLeft: "14px", paddingRight: "14px", gap: "24px" }}>
+    <div
+      className={`flex overflow-x-auto pb-2${hideScrollbar ? " home-strip-scroll" : ""}`}
+      style={{
+        scrollbarWidth: hideScrollbar ? undefined : "thin",
+        scrollBehavior: "smooth",
+        paddingLeft: "14px",
+        paddingRight: "14px",
+        gap: "24px",
+      }}
+    >
       {products.map((product) => (
         <ProductCard
           key={product.id}
@@ -154,6 +172,7 @@ function ProductRow({ products, loading, error, wishlistIds, wishlistBusyId, onW
 }
 
 function Home() {
+  const navigate = useNavigate();
   const [newArrivals, setNewArrivals] = useState([]);
   const [newArrivalsLoading, setNewArrivalsLoading] = useState(true);
   const [newArrivalsError, setNewArrivalsError] = useState(null);
@@ -314,7 +333,9 @@ function Home() {
           gap: "8px",
         }}
       >
-        <span
+        <button
+          type="button"
+          onClick={() => navigate("/signup")}
           style={{
             fontFamily: "'Khula', 'Segoe UI', sans-serif",
             color: "#f7e7c8",
@@ -323,10 +344,14 @@ function Home() {
             letterSpacing: "0.12em",
             fontWeight: 400,
             textTransform: "uppercase",
+            background: "transparent",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
           }}
         >
           Sign up now
-        </span>
+        </button>
         <span style={{ color: "#f7e7c8", fontSize: "14px", marginRight: "3px", lineHeight: 1 }}>→</span>
       </div>
       <div style={{ width: "200px", height: "1px", background: "#f7e7c8", opacity: 0.95 }} />
@@ -358,6 +383,7 @@ function Home() {
             wishlistIds={wishlistIds}
             wishlistBusyId={wishlistBusyId}
             onWishlistToggle={handleWishlistToggle}
+            hideScrollbar
           />
         </div>
       </section>

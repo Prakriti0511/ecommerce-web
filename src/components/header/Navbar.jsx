@@ -7,7 +7,9 @@ function Navbar({ variant = "transparent" }) {
     <header className={`${styles.navbar} ${styles[variant]}`}>
       <nav className={styles.center}>
         <span className={styles.home}>HOME</span>
-        <span>REVIEWS</span>
+        <Link to="/products" className={styles.navLink}>
+          PRODUCTS
+        </Link>
         <span>NEW ARRIVALS</span>
         <span>BESTSELLERS</span>
       </nav>

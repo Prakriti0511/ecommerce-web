@@ -1,0 +1,9 @@
+/* Horizontal scroll without visible scrollbar (New Arrivals strip) */
+.home-strip-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.home-strip-scroll::-webkit-scrollbar {
+  display: none;
+}

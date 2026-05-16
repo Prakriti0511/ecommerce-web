@@ -38,14 +38,23 @@
   margin-right: clamp(10px, 1.8vw, 16px);
 }
 
-.center span {
+.center span,
+.center .navLink {
   cursor: pointer;
   transition: opacity 0.3s;
   white-space: nowrap;
 }
 
-.center span:hover {
+.center span:hover,
+.center .navLink:hover {
   opacity: 0.7;
+}
+
+.navLink {
+  font-size: 14px;
+  line-height: 1;
+  text-decoration: none;
+  color: inherit;
 }
 
 .right {

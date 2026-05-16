@@ -11,6 +11,8 @@ router.get("/best-sellers", productController.getBestSellers);
 
 router.get("/:id", productController.getProductById);
 
+router.patch("/:id", productController.updateProduct);
+
 router.post("/", productController.createProduct);
 
 export default router;

@@ -34,6 +34,53 @@ const createProduct = async (req, res) => {
   }
 };
 
+const UPDATABLE_FIELDS = [
+  "name",
+  "description",
+  "price",
+  "category",
+  "image",
+  "stock",
+  "isNewArrival",
+  "isBestSeller",
+  "rating",
+  "numReviews",
+];
+
+// partial update — send only the field(s) you want to change
+const updateProduct = async (req, res) => {
+  try {
+    const payload = {};
+    for (const key of UPDATABLE_FIELDS) {
+      if (Object.prototype.hasOwnProperty.call(req.body, key)) {
+        payload[key] = req.body[key];
+      }
+    }
+
+    if (Object.keys(payload).length === 0) {
+      return res.status(400).json({
+        message: "No updatable fields in body. Allowed keys: " + UPDATABLE_FIELDS.join(", "),
+      });
+    }
+
+    const product = await Product.findByIdAndUpdate(req.params.id, payload, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.json(product);
+  } catch (error) {
+    if (error.name === "CastError") {
+      return res.status(400).json({ message: "Invalid product id", error: error.message });
+    }
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // new arrivals
 const getNewArrivals = async (req, res) => {
   try {
@@ -59,7 +106,8 @@ const productController = {
   getNewArrivals,
   getBestSellers,
   getProductById,
-  createProduct
+  createProduct,
+  updateProduct,
 };
 
 export default productController;
