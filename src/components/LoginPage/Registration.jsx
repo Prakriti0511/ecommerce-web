@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IoEyeOutline } from "react-icons/io5";
 import { FiEyeOff } from "react-icons/fi";
 import { IoArrowBack } from "react-icons/io5";
+import { useAuth } from "../../context/AuthContext";
 import { auth, provider } from "../../../utils/Firebase";
 import "./AuthCommon.css";
 
@@ -22,6 +23,7 @@ function Registration() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const { refreshAuth } = useAuth();
 
     const onChange = (event) => {
         const { name, value } = event.target;
@@ -55,6 +57,7 @@ function Registration() {
                 throw new Error(data.message || "Signup failed");
             }
 
+            await refreshAuth();
             navigate("/");
         } catch (err) {
             setError(err.message || "Unable to create account");
@@ -85,6 +88,7 @@ function Registration() {
                 throw new Error(data.message || "Google sign up failed");
             }
 
+            await refreshAuth();
             navigate("/");
         } catch (err) {
             setError(err.message || "Unable to sign up with Google");

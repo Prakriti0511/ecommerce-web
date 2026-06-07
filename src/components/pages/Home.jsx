@@ -36,11 +36,11 @@ function mapProductToCard(p) {
   };
 }
 
-function HeartIcon({ filled }) {
+function HeartIcon({ filled, size = 18 }) {
   return (
     <svg
-      width="26"
-      height="25"
+      width={size}
+      height={size}
       viewBox="0 0 26 25"
       fill={filled ? "#eb5b5b" : "rgba(235,91,91,0)"}
       xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@ function ProductCard({ product, inWishlist, wishlistBusyId, onWishlistToggle }) 
         style={{
           height: "320px",
           borderRadius: "25px",
-          boxShadow: "0 4px 4px 0 rgba(0,0,0,0.25)",
+          boxShadow: "0 14px 26px -10px rgba(0,0,0,0.22)",
         }}
       >
         <img
@@ -82,7 +82,7 @@ function ProductCard({ product, inWishlist, wishlistBusyId, onWishlistToggle }) 
           className="absolute inset-0"
           style={{
             borderRadius: "25px",
-            background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%)",
+            background: "linear-gradient(to top, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.04) 50%)",
           }}
         />
         {/* Heart / wishlist button */}
@@ -93,8 +93,9 @@ function ProductCard({ product, inWishlist, wishlistBusyId, onWishlistToggle }) 
           className="absolute top-3 left-3 z-10 bg-transparent border-none cursor-pointer p-0 disabled:opacity-50"
           aria-pressed={inWishlist}
           aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
+          style={{ padding: 6 }}
         >
-          <HeartIcon filled={inWishlist} />
+          <HeartIcon filled={inWishlist} size={16} />
         </button>
       </div>
       {/* Name + price below image */}
@@ -102,7 +103,7 @@ function ProductCard({ product, inWishlist, wishlistBusyId, onWishlistToggle }) 
         <p
           style={{
             fontFamily: "'Cascadia Code', 'Courier New', monospace",
-            fontSize: "16px",
+            fontSize: "13px",
             color: "#4b4b4b",
             margin: 0,
             lineHeight: "1.3",
@@ -113,7 +114,7 @@ function ProductCard({ product, inWishlist, wishlistBusyId, onWishlistToggle }) 
         <p
           style={{
             fontFamily: "'Cascadia Code', 'Courier New', monospace",
-            fontSize: "14px",
+            fontSize: "11px",
             color: "#4b4b4b",
             margin: 0,
             marginTop: "2px",
@@ -127,7 +128,7 @@ function ProductCard({ product, inWishlist, wishlistBusyId, onWishlistToggle }) 
         {[1, 2, 3, 4, 5].map((i) => (
           <span
             key={i}
-            style={{ fontSize: "13px", color: i <= fullStars ? "#7C6B47" : "#d1c9bc" }}
+            style={{ fontSize: "11px", color: i <= fullStars ? "#7C6B47" : "#d1c9bc" }}
           >
             ★
           </span>

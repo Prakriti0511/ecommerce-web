@@ -7,6 +7,7 @@ import Home from './components/pages/Home';
 import ProductDetails from './components/header/Navbar'; 
 import NewArrivals from './components/pages/NewArrivals';
 import Products from './components/pages/Products';
+import Cart from './components/pages/Cart';
 import Login from './components/LoginPage/Login'
 import Registration from './components/LoginPage/Registration'
 
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Registration />} />
         <Route path="/newarrivals" element={<NewArrivals />} />

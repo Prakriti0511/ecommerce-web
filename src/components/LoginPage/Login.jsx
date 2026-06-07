@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IoEyeOutline } from "react-icons/io5";
 import { FiEyeOff } from "react-icons/fi";
 import { IoArrowBack } from "react-icons/io5";
+import { useAuth } from "../../context/AuthContext";
 import { auth, provider } from "../../../utils/Firebase";
 import "./AuthCommon.css";
 
@@ -20,6 +21,7 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { refreshAuth } = useAuth();
 
   const onChange = (event) => {
     const { name, value } = event.target;
@@ -46,6 +48,7 @@ function Login() {
         throw new Error(data.message || "Login failed");
       }
 
+      await refreshAuth();
       navigate("/");
     } catch (err) {
       setError(err.message || "Unable to login");
@@ -76,6 +79,7 @@ function Login() {
         throw new Error(data.message || "Google sign in failed");
       }
 
+      await refreshAuth();
       navigate("/");
     } catch (err) {
       setError(err.message || "Unable to login with Google");

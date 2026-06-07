@@ -35,8 +35,8 @@ export async function postChat(req, res) {
     // --- 2) Keyword rules (bestseller / new arrival)
     let intent = applyKeywordIntentOverrides(userMessage, rawIntent);
 
-    // --- 3) Mongo filter + fetch
-    const filter = buildProductFilter(intent);
+    // --- 3) Mongo filter + fetch (category also parsed from raw message)
+    const filter = buildProductFilter(intent, userMessage);
     let products = await Product.find(filter)
       .sort(PRODUCT_RECOMMENDATION_SORT)
       .limit(MAX_PRODUCTS)

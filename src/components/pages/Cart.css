@@ -1,0 +1,153 @@
+.cart-page {
+  background: #f3f1ec;
+  min-height: 100vh;
+}
+
+.cart-section {
+  padding: 80px 20px 40px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.cart-title {
+  font-family: "Catamaran", sans-serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: #3e3e3e;
+  margin: 0 0 24px;
+}
+
+.cart-muted {
+  font-family: "Cascadia Code", "Courier New", monospace;
+  font-size: 14px;
+  color: #888;
+}
+
+.cart-empty {
+  font-family: "Cascadia Code", "Courier New", monospace;
+  font-size: 14px;
+  color: #4b4b4b;
+}
+
+.cart-shop-link,
+.cart-continue-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: #7c6b47;
+  font-family: "Cascadia Code", "Courier New", monospace;
+  font-size: 13px;
+}
+
+.cart-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px;
+  background: #f2eee8;
+  border-radius: 12px;
+  border: 1px solid #d1c9bc;
+}
+
+.cart-item-image {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.cart-item-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-item-name {
+  margin: 0;
+  font-family: "Cascadia Code", "Courier New", monospace;
+  font-size: 14px;
+  color: #3e3e3e;
+}
+
+.cart-item-price {
+  margin: 4px 0 8px;
+  font-family: "Cascadia Code", "Courier New", monospace;
+  font-size: 12px;
+  color: #7c6b47;
+}
+
+.cart-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cart-qty-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #d1c9bc;
+  border-radius: 6px;
+  background: white;
+  color: #4b4b4b;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.cart-qty-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cart-qty {
+  font-family: "Cascadia Code", "Courier New", monospace;
+  font-size: 13px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.cart-remove-btn {
+  margin-left: 4px;
+  border: none;
+  background: transparent;
+  color: #a36b74;
+  font-family: "Cascadia Code", "Courier New", monospace;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.cart-remove-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cart-item-subtotal {
+  margin: 0;
+  font-family: "Cascadia Code", "Courier New", monospace;
+  font-size: 14px;
+  color: #3e3e3e;
+  flex-shrink: 0;
+}
+
+.cart-summary {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #d1c9bc;
+}
+
+.cart-total {
+  margin: 0 0 8px;
+  font-family: "Cascadia Code", "Courier New", monospace;
+  font-size: 15px;
+  color: #3e3e3e;
+}

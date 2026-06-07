@@ -238,6 +238,19 @@
   transform: scale(0.98);
 }
 
+.add-to-cart-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cart-feedback-msg {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: #7c6b47;
+  font-family: inherit;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .modal-content {

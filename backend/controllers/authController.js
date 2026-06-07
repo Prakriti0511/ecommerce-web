@@ -95,6 +95,15 @@ export const login = async (req, res) => {
     }
 };
 
+// CURRENT USER
+export const getMe = async (req, res) => {
+    return res.status(200).json({
+        _id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+    });
+};
+
 // LOGOUT
 export const logOut = (req, res) => {
     res.clearCookie("token");

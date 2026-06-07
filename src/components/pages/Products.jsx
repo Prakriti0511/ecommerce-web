@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Navbar from '../header/Navbar';
+import { useCart } from '../../context/CartContext';
 import './Products.css';
 
 const API_BASE = import.meta.env.VITE_API_BASE?.replace(/\/$/, "") || "http://localhost:5000";
@@ -11,11 +13,11 @@ function resolveProductImage(src) {
   return `${API_BASE}/${src.replace(/^\/+/, "")}`;
 }
 
-function HeartIcon({ filled }) {
+function HeartIcon({ filled, size = 18 }) {
   return (
     <svg
-      width="26"
-      height="25"
+      width={size}
+      height={size}
       viewBox="0 0 26 25"
       fill={filled ? "#eb5b5b" : "rgba(235,91,91,0)"}
       xmlns="http://www.w3.org/2000/svg"
@@ -43,80 +45,130 @@ function ProductCard({ product, inWishlist, wishlistBusyId, onWishlistToggle, on
   return (
     <div
       className="product-card"
-      style={{ background: "#F2EEE8", width: "220px", borderRadius: "12px", overflow: "hidden", cursor: "pointer" }}
+      style={{
+        backgroundImage: `url(${imageSrc})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        width: "240px",
+        minHeight: "360px",
+        borderRadius: "22px",
+        overflow: "hidden",
+        cursor: "pointer",
+        position: "relative",
+        color: "#f7f1e7",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-end",
+        boxShadow: "0 18px 30px -12px rgba(0,0,0,0.28)",
+      }}
       onClick={onClick}
     >
-      <div className="relative" style={{ height: "240px" }}>
-        <img
-          src={imageSrc}
-          alt={product.name}
-          className="w-full h-full object-cover"
-          style={{ borderRadius: "25px", boxShadow: "0 4px 4px 0 rgba(0,0,0,0.25)" }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            borderRadius: "25px",
-            background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%)",
-          }}
-        />
-        <button
-          type="button"
-          onClick={(e) => onWishlistToggle(e, product._id ?? product.id)}
-          disabled={wishlistBusyId === String(product._id ?? product.id)}
-          style={{
-            position: "absolute",
-            top: "12px",
-            right: "12px",
-            zIndex: 10,
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            padding: 0,
-            opacity: wishlistBusyId === String(product._id ?? product.id) ? 0.5 : 1,
-          }}
-          aria-pressed={inWishlist}
-          aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
-        >
-          <HeartIcon filled={inWishlist} />
-        </button>
-      </div>
-      <div className="px-3 pt-4 pb-2">
-        <p
-          style={{
-            fontFamily: "'Cascadia Code', 'Courier New', monospace",
-            fontSize: "14px",
-            color: "#4b4b4b",
-            margin: 0,
-            lineHeight: "1.3",
-          }}
-        >
-          {product.name}
-        </p>
-        <p
-          style={{
-            fontFamily: "'Cascadia Code', 'Courier New', monospace",
-            fontSize: "12px",
-            color: "#4b4b4b",
-            margin: 0,
-            marginTop: "2px",
-          }}
-        >
-          {price}
-        </p>
-      </div>
-      <div className="flex items-center gap-0.5 px-2 pb-2">
-        {[1, 2, 3, 4, 5].map((i) => (
-          <span
-            key={i}
-            style={{ fontSize: "11px", color: i <= fullStars ? "#7C6B47" : "#d1c9bc" }}
+      <div
+        className="product-card-overlay"
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.18) 30%, rgba(0,0,0,0.5) 100%)",
+          zIndex: 0,
+        }}
+      />
+      <button
+        type="button"
+        onClick={(e) => onWishlistToggle(e, product._id ?? product.id)}
+        disabled={wishlistBusyId === String(product._id ?? product.id)}
+        style={{
+          position: "absolute",
+          top: "16px",
+          right: "16px",
+          zIndex: 2,
+          background: "rgba(255,255,255,0.14)",
+          border: "1px solid rgba(255,255,255,0.45)",
+          borderRadius: "999px",
+          cursor: "pointer",
+          padding: "6px",
+          opacity: wishlistBusyId === String(product._id ?? product.id) ? 0.5 : 1,
+        }}
+        aria-pressed={inWishlist}
+        aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
+      >
+        <HeartIcon filled={inWishlist} size={16} />
+      </button>
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          padding: "14px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "6px",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
+          {product.isNewArrival && (
+            <span
+              style={{
+                background: "rgba(255,255,255,0.18)",
+                color: "#fff",
+                padding: "3px 8px",
+                borderRadius: "999px",
+                fontSize: "9px",
+                backdropFilter: "blur(6px)",
+                border: "1px solid rgba(255,255,255,0.3)",
+              }}
+            >
+              New
+            </span>
+          )}
+          {product.isBestSeller && (
+            <span
+              style={{
+                marginLeft: "auto",
+                background: "rgba(255,255,255,0.18)",
+                color: "#fff",
+                padding: "3px 8px",
+                borderRadius: "999px",
+                fontSize: "9px",
+                backdropFilter: "blur(6px)",
+                border: "1px solid rgba(255,255,255,0.3)",
+              }}
+            >
+              Best Seller
+            </span>
+          )}
+        </div>
+        <div style={{ marginTop: "auto" }}>
+          <p
+            style={{
+              fontFamily: "'Cascadia Code', 'Courier New', monospace",
+              fontSize: "14px",
+              fontWeight: 600,
+              margin: 0,
+              lineHeight: 1.2,
+            }}
           >
-            ★
-          </span>
-        ))}
-        <span style={{ fontSize: "10px", color: "#888", marginLeft: "4px" }}>
-          {ratingLabel}
-        </span>
+            {product.name}
+          </p>
+          <p
+            style={{
+              fontFamily: "'Cascadia Code', 'Courier New', monospace",
+              fontSize: "12px",
+              margin: "6px 0 0",
+              color: "#f7f1e7",
+            }}
+          >
+            {price}
+          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "10px" }}>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <span key={i} style={{ fontSize: "11px", color: i <= fullStars ? "#f6d68b" : "rgba(247,230,202,0.55)" }}>
+                ★
+              </span>
+            ))}
+            <span style={{ fontSize: "10px", color: "rgba(247,230,202,0.86)" }}>
+              {ratingLabel}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -126,6 +178,8 @@ const CHAT_WELCOME =
   "Hello! Ask what you're looking for — skin type, concerns, ingredients, budget, new arrivals, or bestsellers — and I'll suggest products from our catalog.";
 
 const Products = () => {
+  const { getItemQuantity, addToCart, busyProductId } = useCart();
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -133,6 +187,7 @@ const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [wishlistIds, setWishlistIds] = useState([]);
   const [wishlistBusyId, setWishlistBusyId] = useState(null);
+  const [cartFeedback, setCartFeedback] = useState(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [chatLoading, setChatLoading] = useState(false);
@@ -140,6 +195,29 @@ const Products = () => {
     { id: "welcome", role: "assistant", text: CHAT_WELCOME, products: [] },
   ]);
   const chatEndRef = useRef(null);
+  const filterParam = searchParams.get('filter')?.toLowerCase();
+
+  const pageTitle = filterParam === 'new-arrivals'
+    ? 'New Arrivals'
+    : filterParam === 'bestsellers'
+    ? 'Bestsellers'
+    : 'Our Products';
+
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const matchesSearch = product.name
+        .toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesFilter =
+        filterParam === 'new-arrivals'
+          ? Boolean(product.isNewArrival)
+          : filterParam === 'bestsellers'
+          ? Boolean(product.isBestSeller)
+          : true;
+      return matchesSearch && matchesFilter;
+    });
+  }, [products, searchQuery, filterParam]);
 
   useEffect(() => {
     if (!chatOpen) return;
@@ -177,6 +255,22 @@ const Products = () => {
     }
   };
 
+  const handleAddToCart = async (productId) => {
+    const id = String(productId);
+    setCartFeedback(null);
+    const result = await addToCart(id, 1);
+    if (result.needsAuth) {
+      window.alert("Please sign in to add items to your cart.");
+      return;
+    }
+    if (!result.ok) {
+      window.alert(result.message || "Could not add to cart.");
+      return;
+    }
+    setCartFeedback({ productId: id, message: "Added to cart!" });
+    setTimeout(() => setCartFeedback(null), 2000);
+  };
+
   const handleWishlistToggle = async (e, productId) => {
     e.preventDefault();
     e.stopPropagation();
@@ -204,10 +298,6 @@ const Products = () => {
       setWishlistBusyId(null);
     }
   };
-
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const openProductFromChat = (p) => {
     const id = p.id ?? p._id;
@@ -291,7 +381,7 @@ const Products = () => {
 
   if (error) {
     return (
-      <div style={{ background: "#f3f1ec", minHeight: "100vh" }}>
+      <div style={{ background: "#ffffff", minHeight: "100vh" }}>
         <Navbar />
         <div style={{ padding: "2rem", color: "#c00", fontSize: "1rem" }}>Error: {error.message}</div>
       </div>
@@ -299,7 +389,7 @@ const Products = () => {
   }
 
   return (
-    <div style={{ background: "#f3f1ec", minHeight: "100vh" }}>
+    <div style={{ background: "#ffffff", minHeight: "100vh" }}>
       <Navbar />
 
       <section style={{ padding: "40px 14px 24px 14px" }}>
@@ -314,7 +404,7 @@ const Products = () => {
             margin: "0 0 20px 0",
           }}
         >
-          Our Products
+          {pageTitle}
         </h2>
 
         <div className="search-box" style={{ marginBottom: "24px" }}>
@@ -379,7 +469,27 @@ const Products = () => {
                 <p className="modal-price" style={{ fontFamily: "'Cascadia Code', 'Courier New', monospace" }}>
                   ${typeof selectedProduct.price === "number" ? selectedProduct.price.toFixed(2) : selectedProduct.price}
                 </p>
-                <button className="add-to-cart-btn">Add to Cart</button>
+                {(() => {
+                  const productId = String(selectedProduct._id ?? selectedProduct.id);
+                  const inCartQty = getItemQuantity(productId);
+                  const isBusy = busyProductId === productId;
+                  const feedback = cartFeedback?.productId === productId ? cartFeedback.message : null;
+                  return (
+                    <>
+                      <button
+                        type="button"
+                        className="add-to-cart-btn"
+                        disabled={isBusy}
+                        onClick={() => handleAddToCart(productId)}
+                      >
+                        {isBusy ? "Adding…" : inCartQty > 0 ? `Add Another (${inCartQty} in cart)` : "Add to Cart"}
+                      </button>
+                      {feedback && (
+                        <p className="cart-feedback-msg">{feedback}</p>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
             </div>
           </div>

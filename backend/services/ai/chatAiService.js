@@ -92,6 +92,8 @@ function normalizeIntent(raw) {
   return base;
 }
 
+import { extractCategoryFromMessage } from "../../utils/chatFilterBuilder.js";
+
 /**
  * Keyword overrides: OR with AI flags when user clearly uses these phrases.
  */
@@ -104,6 +106,11 @@ export function applyKeywordIntentOverrides(userMessage, intent) {
   }
   if (/\b(new|latest|recent\s+arrivals?|just\s+launched|brand[\s-]?new)\b/i.test(msg)) {
     next.newArrival = true;
+  }
+
+  const categoryFromMessage = extractCategoryFromMessage(msg);
+  if (categoryFromMessage) {
+    next.category = categoryFromMessage;
   }
 
   return next;
