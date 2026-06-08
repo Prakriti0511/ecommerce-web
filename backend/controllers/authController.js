@@ -10,6 +10,13 @@ const genToken = (id) => {
     });
 };
 
+const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
 // REGISTER
 export const registration = async (req, res) => {
     try {
@@ -38,12 +45,7 @@ export const registration = async (req, res) => {
 
         const token = genToken(user._id);
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "Strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        });
+        res.cookie("token", token, cookieOptions);
 
         return res.status(201).json({
             _id: user._id,
@@ -68,6 +70,10 @@ export const login = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
+        if (!user.password) {
+            return res.status(401).json({ message: "This account uses Google sign in" });
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
@@ -76,12 +82,7 @@ export const login = async (req, res) => {
 
         const token = genToken(user._id);
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "Strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        });
+        res.cookie("token", token, cookieOptions);
 
         return res.status(200).json({
             _id: user._id,
@@ -106,7 +107,7 @@ export const getMe = async (req, res) => {
 
 // LOGOUT
 export const logOut = (req, res) => {
-    res.clearCookie("token");
+    res.clearCookie("token", cookieOptions);
     return res.status(200).json({ message: "Logout successful" });
 };
 
@@ -114,6 +115,10 @@ export const logOut = (req, res) => {
 export const googleLogin = async (req, res) => {
     try {
         const { name, email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ message: "Google account email is required" });
+        }
 
         let user = await User.findOne({ email });
 
@@ -123,12 +128,7 @@ export const googleLogin = async (req, res) => {
 
         const token = genToken(user._id);
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "Strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        });
+        res.cookie("token", token, cookieOptions);
 
         return res.status(200).json({
             _id: user._id,

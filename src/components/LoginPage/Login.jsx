@@ -19,7 +19,7 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { refreshAuth } = useAuth();
+  const { refreshAuth, establishSession } = useAuth();
 
   const onChange = (event) => {
     const { name, value } = event.target;
@@ -46,6 +46,7 @@ function Login() {
         throw new Error(data.message || "Login failed");
       }
 
+      establishSession(data);
       await refreshAuth();
       navigate("/");
     } catch (err) {
@@ -77,10 +78,15 @@ function Login() {
         throw new Error(data.message || "Google sign in failed");
       }
 
+      establishSession(data);
       await refreshAuth();
       navigate("/");
     } catch (err) {
-      setError(err.message || "Unable to login with Google");
+      const message =
+        err.code === "auth/popup-closed-by-user"
+          ? "Google sign in was cancelled"
+          : err.message || "Unable to login with Google";
+      setError(message);
     } finally {
       setIsLoading(false);
     }

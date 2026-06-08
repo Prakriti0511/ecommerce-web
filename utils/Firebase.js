@@ -3,9 +3,15 @@ import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+const firebaseApiKey = import.meta.env.VITE_FIREBASE_APIKEY?.trim();
+
+if (!firebaseApiKey) {
+  console.error("VITE_FIREBASE_APIKEY is missing. Google sign-in will not work.");
+}
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
+  apiKey: firebaseApiKey,
   authDomain: "loginauth-1081c.firebaseapp.com",
   projectId: "loginauth-1081c",
   storageBucket: "loginauth-1081c.firebasestorage.app",

@@ -20,7 +20,7 @@ function Registration() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
-    const { refreshAuth } = useAuth();
+    const { refreshAuth, establishSession } = useAuth();
 
     const onChange = (event) => {
         const { name, value } = event.target;
@@ -54,6 +54,7 @@ function Registration() {
                 throw new Error(data.message || "Signup failed");
             }
 
+            establishSession(data);
             await refreshAuth();
             navigate("/");
         } catch (err) {
@@ -85,10 +86,15 @@ function Registration() {
                 throw new Error(data.message || "Google sign up failed");
             }
 
+            establishSession(data);
             await refreshAuth();
             navigate("/");
         } catch (err) {
-            setError(err.message || "Unable to sign up with Google");
+            const message =
+                err.code === "auth/popup-closed-by-user"
+                    ? "Google sign up was cancelled"
+                    : err.message || "Unable to sign up with Google";
+            setError(message);
         } finally {
             setIsLoading(false);
         }

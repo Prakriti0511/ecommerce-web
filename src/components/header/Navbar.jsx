@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import styles from "./Navbar.module.css";
 import { FaShoppingCart, FaSearch, FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -6,7 +7,27 @@ import { useAuth } from "../../context/AuthContext";
 
 function Navbar({ variant = "transparent" }) {
   const { itemCount } = useCart();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuOpen]);
+
+  const handleSignOut = async () => {
+    setMenuOpen(false);
+    await logout();
+  };
 
   return (
     <header className={`${styles.navbar} ${styles[variant]}`}>
@@ -33,9 +54,26 @@ function Navbar({ variant = "transparent" }) {
           )}
         </Link>
         {user ? (
-          <span className={styles.profileBtn} aria-label={`Signed in as ${user.name}`} title={user.name}>
-            <FaUserCircle className={styles.profileIcon} />
-          </span>
+          <div className={styles.profileMenu} ref={menuRef}>
+            <button
+              type="button"
+              className={styles.profileBtn}
+              aria-label={`Signed in as ${user.name}`}
+              aria-expanded={menuOpen}
+              aria-haspopup="true"
+              onClick={() => setMenuOpen((prev) => !prev)}
+            >
+              <FaUserCircle className={styles.profileIcon} />
+            </button>
+            {menuOpen && (
+              <div className={styles.profileDropdown}>
+                <p className={styles.profileGreeting}>Hi, {user.name}</p>
+                <button type="button" className={styles.signOutBtn} onClick={handleSignOut}>
+                  Sign out
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
           <Link to="/login" className={styles.loginBtn}>
             Login

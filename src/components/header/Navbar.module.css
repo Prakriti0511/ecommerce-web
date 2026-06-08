@@ -83,6 +83,11 @@
   background: transparent;
 }
 
+.profileMenu {
+  position: relative;
+  flex-shrink: 0;
+}
+
 .profileBtn {
   display: inline-flex;
   align-items: center;
@@ -94,11 +99,52 @@
   color: #f7e7c8;
   background: transparent;
   flex-shrink: 0;
+  cursor: pointer;
+  padding: 0;
 }
 
 .profileIcon {
   width: 22px;
   height: 22px;
+}
+
+.profileDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 160px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f7e7c8;
+  border: 1px solid rgba(53, 53, 53, 0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  z-index: 20;
+}
+
+.profileGreeting {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(36, 36, 36, 0.92);
+  white-space: nowrap;
+}
+
+.signOutBtn {
+  width: 100%;
+  border: 1px solid rgba(53, 53, 53, 0.35);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: rgba(36, 36, 36, 0.92);
+  background: transparent;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.signOutBtn:hover {
+  opacity: 0.75;
 }
 
 .cartLink {
