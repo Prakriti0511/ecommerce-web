@@ -191,6 +191,7 @@ export function serializeProductsForAi(products) {
  * @returns {{ message: string, responseError: string | null }}
  */
 export async function generateRecommendationResponse(userMessage, productsSerialized) {
+  console.log("OPENAI KEY EXISTS:", !!process.env.OPENAI_API_KEY);
   const client = getOpenAIClient();
   if (!client) {
     return {

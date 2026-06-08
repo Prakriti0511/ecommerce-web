@@ -13,8 +13,17 @@ import cors from "cors";
 const app = express();
 dotenv.config();
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173"
+];
+
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS policy blocked origin: ${origin}`));
+  },
   credentials: true
 }));
 
