@@ -1,10 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../header/Navbar";
+import { API_BASE } from "../../utils/apiBase.js";
 import "./Home.css";
-
-const API_BASE =
-  import.meta.env.VITE_API_BASE?.replace(/\/$/, "") || "http://localhost:5000";
 
 const HERO_IMAGE = "/hero_image.jpg";
 const SKIN_TYPE_IMAGE =

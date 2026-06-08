@@ -6,10 +6,8 @@ import { FiEyeOff } from "react-icons/fi";
 import { IoArrowBack } from "react-icons/io5";
 import { useAuth } from "../../context/AuthContext";
 import { auth, provider } from "../../../utils/Firebase";
+import { API_BASE } from "../../utils/apiBase.js";
 import "./AuthCommon.css";
-
-const API_BASE =
-  import.meta.env.VITE_API_BASE?.replace(/\/$/, "") || "http://localhost:5000";
 
 function Login() {
   const [show, setShow] = useState(false);

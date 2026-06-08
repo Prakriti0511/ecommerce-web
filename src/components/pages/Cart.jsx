@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
 import Navbar from "../header/Navbar";
 import { useCart } from "../../context/CartContext";
+import { API_BASE } from "../../utils/apiBase.js";
 import "./Cart.css";
-
-const API_BASE = import.meta.env.VITE_API_BASE?.replace(/\/$/, "") || "http://localhost:5000";
 
 function resolveProductImage(src) {
   if (!src) return "/products-grey.png";

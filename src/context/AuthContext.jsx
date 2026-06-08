@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-
-const API_BASE = import.meta.env.VITE_API_BASE?.replace(/\/$/, "") || "http://localhost:5000";
+import { API_BASE } from "../utils/apiBase.js";
 
 const AuthContext = createContext(null);
 
