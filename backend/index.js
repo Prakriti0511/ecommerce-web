@@ -16,7 +16,7 @@ dotenv.config();
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:5173",
-  "https://ecommerce-mdulfle97-prakriti0511s-projects.vercel.app"
+  "https://ecommerce-web-sigma-ten.vercel.app"
 ];
 
 app.use(cors({
