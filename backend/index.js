@@ -16,7 +16,7 @@ dotenv.config();
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:5173",
-  "https://ecommerce-web-backend-g18x.onrender.com"
+  "https://ecommerce-mdulfle97-prakriti0511s-projects.vercel.app"
 ];
 
 app.use(cors({
