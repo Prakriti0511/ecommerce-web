@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../header/Navbar";
 import { API_BASE } from "../../utils/apiBase.js";
@@ -7,6 +7,9 @@ import "./Home.css";
 const HERO_IMAGE = "/hero_image.jpg";
 const SKIN_TYPE_IMAGE =
   "https://api.builder.io/api/v1/image/assets/TEMP/aa1ec44ee29a90caf0ef476ef282c8c5a2b00292?width=1284";
+const CHAT_WELCOME =
+  "Hello! Ask what you're looking for — skin type, concerns, ingredients, budget, new arrivals, or bestsellers — and I'll suggest products from our catalog.";
+
 function resolveProductImage(src) {
   if (!src) return "/products-grey.png";
   if (/^https?:\/\//i.test(src)) return src;
@@ -182,6 +185,14 @@ function Home() {
 
   const [wishlistIds, setWishlistIds] = useState([]);
   const [wishlistBusyId, setWishlistBusyId] = useState(null);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatInput, setChatInput] = useState("");
+  const [chatLoading, setChatLoading] = useState(false);
+  const [chatMessages, setChatMessages] = useState(() => [
+    { id: "welcome", role: "assistant", text: CHAT_WELCOME, products: [] },
+  ]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const chatEndRef = useRef(null);
 
   const loadWishlist = useCallback(async () => {
     try {
@@ -257,6 +268,91 @@ function Home() {
   useEffect(() => {
     loadWishlist();
   }, [loadWishlist]);
+
+  useEffect(() => {
+    if (!chatOpen) return;
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [chatOpen, chatMessages, chatLoading]);
+
+  const openProductFromChat = (p) => {
+    const id = p.id ?? p._id;
+    setSelectedProduct({
+      _id: id,
+      id,
+      name: p.name,
+      price: p.price,
+      image: p.image,
+      description: p.description,
+      category: p.category,
+      rating: p.rating,
+      numReviews: p.numReviews,
+    });
+  };
+
+  const sendChatMessage = async () => {
+    const text = chatInput.trim();
+    if (!text || chatLoading) return;
+
+    const userId = `u-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+    setChatMessages((prev) => [...prev, { id: userId, role: "user", text, products: [] }]);
+    setChatInput("");
+    setChatLoading(true);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        const fallback =
+          typeof data.aiMessage === "string"
+            ? data.aiMessage
+            : `Something went wrong (${res.status}). Please try again.`;
+        setChatMessages((prev) => [
+          ...prev,
+          {
+            id: `a-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+            role: "assistant",
+            text: fallback,
+            products: Array.isArray(data.products) ? data.products : [],
+          },
+        ]);
+        return;
+      }
+
+      const aiMessage =
+        typeof data.aiMessage === "string" && data.aiMessage.trim()
+          ? data.aiMessage.trim()
+          : "Here’s what I found.";
+      const suggested = Array.isArray(data.products) ? data.products : [];
+
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          id: `a-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+          role: "assistant",
+          text: aiMessage,
+          products: suggested,
+        },
+      ]);
+    } catch {
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          id: `a-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+          role: "assistant",
+          text: "Could not reach the server. Check your connection and that the API is running.",
+          products: [],
+        },
+      ]);
+    } finally {
+      setChatLoading(false);
+    }
+  };
 
   return (
     <div style={{ background: "#f3f1ec", minHeight: "100vh" }}>
@@ -461,6 +557,37 @@ function Home() {
         />
       </section>
 
+      {selectedProduct && (
+        <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setSelectedProduct(null)}>
+              ✕
+            </button>
+            <div className="modal-body">
+              <div className="modal-image-wrapper">
+                <img
+                  src={resolveProductImage(selectedProduct.image)}
+                  alt={selectedProduct.name}
+                  className="modal-image"
+                />
+              </div>
+              <div className="modal-details">
+                <h2 style={{ fontFamily: "'Cascadia Code', 'Courier New', monospace" }}>{selectedProduct.name}</h2>
+                <p className="modal-price" style={{ fontFamily: "'Cascadia Code', 'Courier New', monospace" }}>
+                  ${typeof selectedProduct.price === "number" ? selectedProduct.price.toFixed(2) : selectedProduct.price}
+                </p>
+                {selectedProduct.description && (
+                  <p style={{ color: "#6b6b6b", lineHeight: 1.6 }}>{selectedProduct.description}</p>
+                )}
+                {selectedProduct.category && (
+                  <p style={{ color: "#7C6B47", fontWeight: 600, marginTop: "8px" }}>{selectedProduct.category}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* FOOTER CARD */}
       <footer style={{ padding: "0 14px 16px" }}>
         <div
@@ -537,6 +664,232 @@ function Home() {
           </div>
         </div>
       </footer>
+
+      <button
+        type="button"
+        onClick={() => setChatOpen(!chatOpen)}
+        aria-expanded={chatOpen}
+        aria-label={chatOpen ? "Close skincare assistant" : "Open skincare assistant"}
+        style={{
+          position: "fixed",
+          bottom: "24px",
+          right: "24px",
+          width: "56px",
+          height: "56px",
+          borderRadius: "50%",
+          background: "#7C6B47",
+          border: "2px solid #F2EEE8",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 999,
+          transition: "all 0.3s ease",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+          transform: chatOpen ? "scale(1.1)" : "scale(1)",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = "#6b5a3d";
+          e.currentTarget.style.boxShadow = "0 6px 16px rgba(0,0,0,0.2)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = "#7C6B47";
+          e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+        }}
+      >
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3 .97 4.29L2 22l6.18-.99C9.31 21.75 10.63 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.41 0-2.73-.3-3.93-.86l-.28-.15-2.9.46.47-2.83-.18-.29C4.25 14.82 4 13.47 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm3.64-11.36c-.2-.2-.52-.2-.72 0l-2.5 2.5c-.2.2-.52.2-.72 0l-1.44-1.44c-.2-.2-.52-.2-.72 0-.2.2-.2.52 0 .72l1.44 1.44c.2.2.2.52 0 .72l-2.5 2.5c-.2.2-.2.52 0 .72.2.2.52.2.72 0l2.5-2.5c.2-.2.52-.2.72 0l1.44 1.44c.2.2.52.2.72 0 .2-.2.2-.52 0-.72l-1.44-1.44c-.2-.2-.2-.52 0-.72l2.5-2.5c.2-.2.2-.52 0-.72z"
+            fill="#F2EEE8"
+          />
+        </svg>
+      </button>
+
+      {chatOpen && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "96px",
+            right: "24px",
+            width: "320px",
+            background: "#F2EEE8",
+            borderRadius: "12px",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+            display: "flex",
+            flexDirection: "column",
+            zIndex: 999,
+            maxHeight: "500px",
+            border: "2px solid #7C6B47",
+          }}
+        >
+          <div
+            style={{
+              background: "#7C6B47",
+              color: "white",
+              padding: "16px",
+              borderRadius: "10px 10px 0 0",
+              fontFamily: "'Catamaran', sans-serif",
+              fontSize: "16px",
+              fontWeight: 600,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <span>AI Assistant</span>
+            <button
+              onClick={() => setChatOpen(false)}
+              style={{
+                background: "none",
+                border: "none",
+                color: "white",
+                cursor: "pointer",
+                fontSize: "18px",
+                padding: 0,
+              }}
+            >
+              ✕
+            </button>
+          </div>
+          <div
+            className="chat-messages"
+            style={{
+              padding: "12px 14px",
+              flex: 1,
+              overflowY: "auto",
+              fontFamily: "'Cascadia Code', monospace",
+              fontSize: "13px",
+              color: "#4b4b4b",
+              lineHeight: "1.45",
+              minHeight: "220px",
+              maxHeight: "320px",
+            }}
+          >
+            {chatMessages.map((m) => (
+              <div
+                key={m.id}
+                style={{
+                  marginBottom: "12px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: m.role === "user" ? "flex-end" : "flex-start",
+                }}
+              >
+                <div
+                  style={{
+                    maxWidth: "92%",
+                    padding: "8px 10px",
+                    borderRadius: "10px",
+                    background: m.role === "user" ? "#ddd5cd" : "white",
+                    border: m.role === "user" ? "none" : "1px solid #d1c9bc",
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {m.role === "assistant" && (
+                    <span style={{ color: "#7C6B47", fontSize: "11px", display: "block", marginBottom: "4px" }}>
+                      Skincare assistant
+                    </span>
+                  )}
+                  {m.text}
+                </div>
+                {m.role === "assistant" && m.products?.length > 0 && (
+                  <div style={{ marginTop: "8px", width: "100%" }}>
+                    <p style={{ margin: "0 0 6px 0", fontSize: "11px", color: "#888" }}>Suggested products</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                      {m.products.map((p) => {
+                        const img = resolveProductImage(p.image);
+                        const priceLabel =
+                          typeof p.price === "number" ? `$${p.price.toFixed(2)}` : String(p.price ?? "");
+                        return (
+                          <button
+                            key={p.id ?? p._id}
+                            type="button"
+                            onClick={() => openProductFromChat(p)}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "8px",
+                              padding: "6px 8px",
+                              borderRadius: "8px",
+                              border: "1px solid #d1c9bc",
+                              background: "#faf8f5",
+                              cursor: "pointer",
+                              textAlign: "left",
+                              width: "100%",
+                            }}
+                          >
+                            <img
+                              src={img}
+                              alt=""
+                              style={{ width: "40px", height: "40px", objectFit: "cover", borderRadius: "6px" }}
+                            />
+                            <span style={{ flex: 1, fontSize: "12px", color: "#3e3e3e" }}>{p.name}</span>
+                            <span style={{ fontSize: "11px", color: "#7C6B47" }}>{priceLabel}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+            {chatLoading && (
+              <p style={{ margin: 0, fontSize: "12px", color: "#888", fontStyle: "italic" }}>Thinking…</p>
+            )}
+            <div ref={chatEndRef} />
+          </div>
+          <div
+            style={{
+              padding: "12px",
+              borderTop: "1px solid #d1c9bc",
+              display: "flex",
+              gap: "8px",
+            }}
+          >
+            <input
+              type="text"
+              placeholder="e.g. moisturizer for dry skin under $50"
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  sendChatMessage();
+                }
+              }}
+              disabled={chatLoading}
+              style={{
+                flex: 1,
+                padding: "8px 12px",
+                border: "1px solid #d1c9bc",
+                borderRadius: "6px",
+                fontFamily: "'Cascadia Code', monospace",
+                fontSize: "12px",
+                background: "white",
+              }}
+            />
+            <button
+              type="button"
+              onClick={sendChatMessage}
+              disabled={chatLoading || !chatInput.trim()}
+              style={{
+                background: "#7C6B47",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                padding: "8px 12px",
+                cursor: chatLoading || !chatInput.trim() ? "not-allowed" : "pointer",
+                fontSize: "14px",
+                fontWeight: 600,
+                opacity: chatLoading || !chatInput.trim() ? 0.6 : 1,
+              }}
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
